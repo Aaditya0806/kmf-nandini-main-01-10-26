@@ -611,80 +611,87 @@ const Home = () => {
               </div>
             </div>
 
-            <div className="relative w-full overflow-auto flex flex-col justify-center items-start space-y-5 ">
-              {/* <div className="w-full flex flex-col shadow-md overflow-hidden space-y-4 justify-center items-center  rounded-lg">
-                <h1 className="p-5 bg-primary-gradient text-white uppercase text-center">
-                ಪನೀರ್ ಸ್ಪರ್ಧೆ
-
-                </h1>
-                <div className="marquee-notification h-full flex justify-evenly space-x-3">
-                  {product?.map((item, id) => {
-                    return (
-                      <ArrivalCard
-                        key={id}
-                        title={item?.attributes?.name}
-                        imgUrl={item?.attributes?.image?.data?.[0]?.attributes?.url}
-                        link={`/${locale}/our-product/${item?.attributes?.subcategory?.data?.id}`}
-                      />
-                    );
-                  })}
+             <div className="relative w-full overflow-hidden flex flex-col justify-center items-start">
+            <div className="w-full flex flex-col md:flex-row gap-5 shadow-md overflow-hidden justify-center items-center rounded-lg">
+          
+              <div className="w-full overflow-hidden">
+                <div className="flex w-max gap-5 animate-scroll">
+          
+                  <div className="w-72 h-64 md:w-[360px] md:h-[450px] flex-shrink-0">
+                    <img
+                      loading="lazy"
+                      decoding="async"
+                      className="w-full h-full object-fill"
+                      src={noti7.src}
+                      alt=""
+                    />
+                  </div>
+          
+                  <div className="w-72 h-64 md:w-[360px] md:h-[450px] flex-shrink-0">
+                    <img
+                      loading="lazy"
+                      decoding="async"
+                      className="w-full h-full object-fill"
+                      src={noti6.src}
+                      alt=""
+                    />
+                  </div>
+          
+                  <div className="w-72 h-64 md:w-[360px] md:h-[450px] flex-shrink-0">
+                    <img
+                      loading="lazy"
+                      decoding="async"
+                      className="w-full h-full object-fill"
+                      src={noti1.src}
+                      alt=""
+                    />
+                  </div>
+          
+                  <div className="w-72 h-64 md:w-[360px] md:h-[450px] flex-shrink-0">
+                    <img
+                      loading="lazy"
+                      decoding="async"
+                      className="w-full h-full object-fill"
+                      src={noti3.src}
+                      alt=""
+                    />
+                  </div>
+          
+                  <div className="w-72 h-64 md:w-[520px] md:h-[450px] flex-shrink-0">
+                    <img
+                      loading="lazy"
+                      decoding="async"
+                      className="w-full h-full object-fill"
+                      src={noti2.src}
+                      alt=""
+                    />
+                  </div>
+          
+                  <div className="w-72 h-64 md:w-[520px] md:h-[430px] flex-shrink-0">
+                    <img
+                      loading="lazy"
+                      decoding="async"
+                      className="w-full h-full object-fill"
+                      src={noti4.src}
+                      alt=""
+                    />
+                  </div>
+          
+                  <div className="w-72 h-64 md:w-[520px] md:h-[430px] flex-shrink-0">
+                    <img
+                      loading="lazy"
+                      decoding="async"
+                      className="w-full h-full object-fill"
+                      src={noti5.src}
+                      alt=""
+                    />
+                  </div>
+          
                 </div>
-                  <div className='w-full flex space-x-5 justify-between items-center'>
-                                  {product?.map((item, id) => {
-                                    return (
-                                      <ArrivalCard
-                                        key={id}
-                                        title={item?.attributes?.name}
-                                        imgUrl={item?.attributes?.image?.data?.[0]?.attributes?.url}
-                                        link={`/${locale}/our-product/${item?.attributes?.subcategory?.data?.id}`}
-                                      />
-                                    );
-                                  })}    
-                
-                                  <div className='w-full md:w-[50%] md:h-[450px]' >
-                                         <img loading="lazy" decoding="async" className='w-full h-full object-contain' src={paneerImg.src} alt="" />
-                                  </div>
-                                  <div className='w-full md:w-[50%] md:h-[450px]' >
-                                    <video className='w-full h-full object-contain' src="/video/paneer.mp4" autoPlay muted controls></video>
-                                  </div>
-                                  </div>
-              </div> */}
-               <div className="w-full flex flex-col md:flex-row gap-5 shadow-md overflow-hidden space-y-4 justify-center items-center   rounded-lg">
-                            
-                               {/* <div className='w-full md:w-[270px] h-[450px]' >
-                                  <video className='w-full h-full object-contain' src="/video/paneer.mp4" autoPlay muted controls></video>
-                                </div>
-                               <div className='w-full md:w-[270px] h-[450px]' >
-                                  <video className='w-full h-full object-contain' src="/video/video2.mp4" autoPlay muted controls></video>
-                                </div> */}
-                              <marquee className="w-full  h-full flex  space-x-3">
-                                <div className='w-full flex space-x-5 '>
-                                <div className='w-72  h-64   md:w-[360px] md:h-[450px] mr-5'>
-                                                    <img loading="lazy" decoding="async" className='w-full object-fill h-full'  src={noti7.src} alt="" />
-                                                   </div>
-                                                   <div className='w-72  h-64   md:w-[360px] md:h-[450px] mr-5'>
-                                                    <img loading="lazy" decoding="async" className='w-full object-fill h-full'  src={noti6.src} alt="" />
-                                                   </div>
-                                 <div className='w-72  h-64   md:w-[360px] md:h-[450px] mr-5'>
-                                  <img loading="lazy" decoding="async" className='w-full object-fill h-full' src={noti1.src} alt="" />
-                                 </div>
-                                  <div className='w-72  h-64   md:w-[360px] md:h-[450px] mr-5'>
-                                  <img loading="lazy" decoding="async" className='w-full object-fill h-full' src={noti3.src} alt="" />
-                                 </div>
-                                 <div className='w-72  h-64   md:w-[520px] md:h-[450px] mr-5'>
-                                  <img loading="lazy" decoding="async" className='w-full object-fill h-full' src={noti2.src} alt="" />
-                                 </div>
-                                 <div className='w-72  h-64   md:w-[520px] md:h-[450px] mr-5'>
-                                  <img loading="lazy" decoding="async" className='w-full object-fill h-full' src={noti4.src} alt="" />
-                                 </div>
-                                 <div className='w-72  h-64   md:w-[520px] md:h-[450px] mr-5'>
-                                  <img loading="lazy" decoding="async" className='w-full object-fill h-full' src={noti5.src} alt="" />
-                                 </div>
-                                </div>
-                              
-                              </marquee>
-                            </div>
+              </div>
+          
             </div>
+          </div>
           </div>
         </div>
       </section>
