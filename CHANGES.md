@@ -142,3 +142,25 @@ Applied on top of the developer's repo (`kmf-nandini-main-01-10-26`, which alrea
 | Vercel cron (Monday 09:00 IST) for the optional demand email; harmless while off | `vercel.json`, `src/app/api/cron/demand-report/` | |
 
 Verification: `next build` ✅, `next lint` ✅ (0 errors on changed files), forms/API/admin exercised against both the in-memory store and the live Supabase project (test rows removed). Kannada text in `src/configtext/forms.js` still needs a native review.
+
+---
+
+## 4 Oct 2026 — landing page rework (branch `feat/landing-redesign`)
+
+Safety net: tag `backup/before-landing-redesign-2026-10-04` on GitHub = the live code before this change; local copy in `KMF/kmf-live-backup-2026-10-04/`.
+
+| Change | Files | Notes |
+|---|---|---|
+| One shared home page for `/`, `/en` and `/kn` (was two 860-line copies; `/en` used to show the Kannada page) | `src/components/home/HomePage.js`, `src/components/home/Cards.js`, `src/configtext/home.js`, `src/app/page.js`, `src/app/[locale]/page.js` | All text per language in the config file |
+| Hero: video without player controls, dark gradient, headline, one-line intro, **Explore products** / **Contact us** buttons; the external Lottie embed is gone | | Layout contract with the overlay header kept (absolute page, hero shrinks on scroll) |
+| Consistent section titles (eyebrow + title + accent bar) instead of black-shadow gradient boxes | | |
+| Explore carousel: labels always visible (were hover-only, so invisible on phones), 1 card per view on phones, relative links | | |
+| About KMF / Our brand: two glass cards on the parallax banner, full CMS text (was first paragraph only, "typewriter" that didn't type) | | |
+| Know your milk: tiles as a 2×2 grid with icons | | |
+| Notifications: **live tender list from the CMS** (title + last date, falls back to the old static list), beside the developer's image carousel | | Old page had a hard-coded 2024 list |
+| Quick links: 8 tiles incl. products, bulk order, dealership, notify-me, complaint, careers, dairy tour, commercials | | |
+| Duplicate second "Welcome" block replaced by "Our story" with the same video | | |
+| Certificates: CMS images when available, clean white cards, responsive slides | | |
+| Removed the page's own runtime error (`newsImp is not defined` on the live site) | | Pre-existing hydration warnings from the header remain on every page |
+
+Verified: `next build` ✅, lint ✅, screenshots of `/`, `/kn` and mobile (Playwright) checked by hand.
