@@ -37,6 +37,9 @@ export const PAGE_CHIPS = [
   { match: /^\/our-product/, chips: ['Nandini ghee prices?', 'Where can I buy Nandini products?', 'What types of milk are there?'] },
   { match: /^\/blog\/notification/, chips: ['Show the latest tenders', 'Any tender for cattle feed?', 'Where are tender PDFs?'] },
   { match: /^\/contact/, chips: ['How do I complain about quality?', 'I want to place a bulk order', 'How do I open a Nandini parlour?'] },
+  { match: /^\/complaint/, chips: ['Check my complaint status', 'Shop charged more than MRP', 'How do I contact customer care?'] },
+  { match: /^\/dealership/, chips: ['How do I open a Nandini parlour?', 'Where can I buy Nandini products?'] },
+  { match: /^\/notify-me/, chips: ['Where can I buy Nandini products?', 'What Nandini products are there?'] },
   { match: /^\/animal-husbandry/, chips: ['How can I sell my milk to KMF?', 'What schemes are there for farmers?', 'Is there cattle insurance?'] },
   { match: /^\/milk-union/, chips: ['How many milk unions are there?', 'Tell me about Mysuru milk union'] },
   { match: /^\/nandini-recipes/, chips: ['A recipe with Nandini ghee', 'Easy sweet recipes'] },
@@ -45,13 +48,13 @@ export const PAGE_CHIPS = [
 // The visitor's answer in the "What brings you here today?" popup -> chips.
 export const INTENT_CHIPS = {
   jobs: ['Any current vacancies?', 'How do I apply?', 'Is a job offer I got real?'],
-  buy_products: ['Where can I buy Nandini products?', 'What types of milk are there?', 'Nandini ghee prices?'],
+  buy_products: ['Where can I buy Nandini products?', 'Nandini is not available in my city', 'Nandini ghee prices?'],
   dealership: ['How do I open a Nandini parlour?', 'Who do I contact for dealership?'],
   bulk_order: ['I want to place a bulk order', 'Customer care number?'],
   dairy_farmer: ['How can I sell my milk to KMF?', 'What schemes are there for farmers?'],
   tenders: ['Show the latest tenders', 'Any tender for cattle feed?'],
   recipes: ['A recipe with Nandini ghee', 'Easy sweet recipes'],
-  complaint: ['How do I complain about quality?', 'Shop charged more than MRP'],
+  complaint: ['How do I complain about quality?', 'Shop charged more than MRP', 'Check my complaint status'],
 };
 
 export const DEFAULT_CHIPS = ['What Nandini products are there?', 'Any current vacancies?', 'Show the latest tenders', 'How do I contact customer care?'];

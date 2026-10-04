@@ -5,6 +5,10 @@
 // `text` replies are fixed (edit freely; Markdown: **bold**, [link](/en/...), "- " lists).
 // `live` replies are built from current KMF data by src/lib/ask-nandini/stored.js,
 // so they stay correct when careers, tenders or milk unions change.
+// `match` (optional) is a regular expression tried after the exact `questions`
+// list, against the lower-cased message with punctuation removed.
+// `anytime: true` lets a reply match at ANY point in the conversation, not only
+// the first message. Use it only for context-free messages (greetings, thanks).
 
 const HOURS = '10:00 AM – 5:45 PM, except second and fourth Saturday, Sunday and State Government holidays';
 const FRAUD =
@@ -40,14 +44,14 @@ KMF never asks for money for jobs through personal bank accounts, UPI, wallets o
     questions: ['nandini ghee prices', 'nandini ghee price', 'ghee price', 'nandini milk price', 'nandini prices', 'price list', 'mrp'],
     text: `Nandini product prices (MRP) are not published on the KMF website. Please check at your nearest Nandini parlour or outlet, or call toll-free **1800 425 8030** (${HOURS}).
 
-If you were charged more than the MRP, you can report it using the [contact form (MRP related)](/en/contact?category=mrp).`,
+If you were charged more than the MRP, you can [file a complaint](/en/complaint) and get a ticket number to track it.`,
   },
   {
     id: 'where_to_buy',
     questions: ['where can i buy nandini products', 'where to buy nandini products', 'where can i buy nandini', 'nandini parlour near me', 'nandini shop near me'],
     text: `Nandini products are sold at **Nandini parlours and outlets** across Karnataka. To find one near you, call toll-free **1800 425 8030** or the helpline **080-260 96800** (${HOURS}), or WhatsApp **[7899683696](https://wa.me/917899683696)**.
 
-You can see the full range on the [Nandini Products](/en/our-product) page.`,
+You can see the full range on the [Nandini Products](/en/our-product) page. Outside Karnataka, or a product missing near you? Use [Notify me when available](/en/notify-me) and KMF will tell you when it reaches your area.`,
   },
   { id: 'products', questions: ['what nandini products are there', 'nandini products', 'what products do you have', 'product list'], live: 'products' },
   { id: 'milk_types', questions: ['what types of milk are there', 'types of milk', 'what milk types are there', 'nandini milk types'], live: 'milk_types' },
@@ -78,22 +82,22 @@ Mention the products, quantities, date and location, and the team will get back 
   },
   {
     id: 'parlour',
-    questions: ['how do i open a nandini parlour', 'how to open a nandini parlour', 'nandini parlour', 'nandini franchise', 'who do i contact for dealership', 'dealership', 'nandini dealership', 'nandini agency'],
-    text: `To apply for a Nandini parlour, agency or dealership, send your enquiry using the [contact form (new agency/parlour)](/en/contact?category=new-agency-parlour), or call toll-free **1800 425 8030** (${HOURS}).
+    questions: ['how do i open a nandini parlour', 'how to open a nandini parlour', 'nandini parlour', 'nandini franchise', 'who do i contact for dealership', 'dealership', 'nandini dealership', 'nandini agency', 'franchise', 'franchisee', 'i want franchise', 'i want to sell nandini products', 'how to become a nandini distributor', 'distributorship'],
+    text: `You can apply online on the [Nandini parlour, agency & dealership](/en/dealership) page: choose parlour, milk agency, distributor or franchise, add your location and contact details, and you get a reference number. There is no fee. The marketing team of KMF or your district milk union will call you, usually within 7 working days.
 
-Include your location and contact details in the form so the team can guide you on the process.`,
+You can also call toll-free **1800 425 8030** (${HOURS}).`,
   },
   {
     id: 'quality_complaint',
     questions: ['how do i complain about quality', 'quality complaint', 'complaint', 'how to complain', 'i want to complain'],
-    text: `Sorry about the trouble. Please report the quality issue using the [contact form (quality)](/en/contact?category=quality) and mention the product, pack date or batch code if you have it, and where you bought it.
+    text: `Sorry about the trouble. Please [file a complaint](/en/complaint) on the website: choose the type of problem, describe it, attach a photo of the product or pack date if you can, and you get a **ticket number** (like KMF-C-7K3PX9) to track it, here in the chat or on that page.
 
 You can also call toll-free **1800 425 8030** (${HOURS}), WhatsApp **[7899683696](https://wa.me/917899683696)** or email **customercare.nandini@kmf.coop**.`,
   },
   {
     id: 'mrp_complaint',
     questions: ['shop charged more than mrp', 'charged more than mrp', 'overcharged'],
-    text: `You can report a shop charging more than the MRP using the [contact form (MRP related)](/en/contact?category=mrp). Please mention the shop's name and location, the product and the amount charged.
+    text: `You can report a shop charging more than the MRP by [filing a complaint](/en/complaint): choose "Charged more than MRP", give the shop's name and location, the product and the amount charged, and attach a photo of the bill if you have one. You get a ticket number to track it.
 
 You can also call toll-free **1800 425 8030** (${HOURS}).`,
   },
@@ -111,10 +115,25 @@ You can also call toll-free **1800 425 8030** (${HOURS}).`,
 Hours: ${HOURS}.`,
   },
 
-  // ---------- Greetings ----------
+  {
+    id: 'complaint_status',
+    questions: ['check my complaint status', 'check complaint status', 'complaint status', 'track my complaint', 'status of my complaint', 'where is my complaint', 'my complaint status'],
+    text: `Sure. Please type your **ticket number** (it looks like KMF-C-7K3PX9; it was shown when you filed the complaint). You can also check it on the [complaint page](/en/complaint#status).`,
+  },
+  {
+    id: 'notify_me',
+    questions: ['nandini is not available in my city', 'not available in my city', 'not available in my area', 'nandini not available near me', 'is nandini available outside karnataka', 'available outside karnataka', 'outside karnataka', 'do you deliver outside karnataka', 'can i order online', 'online order', 'online delivery', 'home delivery'],
+    text: `Nandini products are sold mainly in Karnataka through parlours and outlets, and there is no online delivery yet. If you are outside Karnataka, or a product is not available near you, please use [Notify me when available](/en/notify-me): leave your PIN code and the products you want, and KMF will tell you when Nandini reaches your area. These requests also help KMF decide where to expand next.
+
+For a Nandini outlet or distributor near you, call toll-free **1800 425 8030** (${HOURS}).`,
+  },
+
+  // ---------- Greetings & small talk (answered at any point in the chat) ----------
   {
     id: 'greeting',
-    questions: ['hi', 'hello', 'hey', 'hii', 'hai', 'namaste', 'namaskara', 'good morning', 'good afternoon', 'good evening'],
+    anytime: true,
+    questions: ['hi', 'hello', 'hey', 'hii', 'hai', 'hlo', 'namaste', 'namaskara', 'namaskar', 'ನಮಸ್ಕಾರ', 'good morning', 'good afternoon', 'good evening', 'greetings'],
+    match: /^(hi+|hello+|hey+|hai|hlo|helo|hola|yo|namaste|namaskar|namaskara|good (morning|afternoon|evening|night)|greetings)( there| sir| madam| nandini| team| kmf| all| everyone| dear)?$/,
     text: `Hello! 👋 I'm Ask Nandini, KMF's assistant. I can help with:
 
 - **Nandini products** and where to buy them
@@ -124,6 +143,43 @@ Hours: ${HOURS}.`,
 - **Bulk orders, parlours** and **complaints**
 
 What would you like to know?`,
+  },
+  {
+    id: 'thanks',
+    anytime: true,
+    questions: ['thanks', 'thank you', 'thank u', 'thankyou', 'thanku', 'thx', 'tq', 'ty', 'ok thanks', 'ok thank you', 'thank you so much', 'thanks a lot'],
+    match: /^(ok+|okay|okk|great|fine|sure|good|nice|super|alright|got it|no|yes)?\s*(thanks?|thank (you|u)|thankyou|thanku|thx|thnx|thnks|tq|ty|tysm|thanks a lot)( (so|very) much| a lot| sir| madam| nandini| for (the|your) (help|info|information|reply))*$/,
+    text: `You're welcome! 😊 If you have any other questions about Nandini products, where to buy them, careers, tenders or KMF services, just ask.`,
+  },
+  {
+    id: 'acknowledgement',
+    anytime: true,
+    questions: ['ok', 'okay', 'okk', 'k', 'fine', 'sure', 'great', 'nice', 'cool', 'super', 'good', 'got it', 'alright', 'understood', 'noted', 'hmm', 'oh', 'ohk', 'ok sir'],
+    match: /^(ok+|okay|okk|k|fine|sure|great|nice|cool|super|good|got it|alright|all right|understood|noted|hm+|oh+|ohk|okie|oky)( ok+| sir| madam| fine| good| great)?$/,
+    text: `Is there anything else I can help you with? You can ask about Nandini products, where to buy them, careers, tenders, milk unions or how to contact KMF.`,
+  },
+  {
+    id: 'goodbye',
+    anytime: true,
+    questions: ['bye', 'goodbye', 'good bye', 'see you', 'tata', 'ok bye', 'close', 'no thanks', 'nothing', 'ntg', 'no need', 'nothing else'],
+    match: /^(ok+ |okay )?(bye+|goodbye|good bye|see you|see ya|cya|tata|ta ta|close|exit|quit|done|that'?s all|thats all|nothing( else| more)?|ntg|no need( right now| now)?|no thanks|no thank you|not now|no more)( sir| madam| thanks| thank you)?$/,
+    text: `Goodbye, and thank you for visiting the KMF website! 👋 If you need anything later, I'm here on every page, or you can call toll-free **1800 425 8030** (${HOURS}).`,
+  },
+  {
+    // Only as the FIRST message: later on, "yes" / "1" may answer something Claude asked.
+    id: 'unclear',
+    questions: ['yes', 'yes please', 'no', 'yeah', 'yup', 'nope', 'i', 'test', 'testing', 'help', 'question', 'query', 'ask', 'info', 'information', 'details', 'please', 'pls', 'sir', 'madam'],
+    match: /^(\d{1,6}|[^a-z0-9]*)$/,
+    text: `What would you like to know? You can ask me about:
+
+- **Nandini products** and where to buy them
+- **Prices (MRP)**, bulk orders and home delivery
+- **Careers** and recruitment notices
+- **Tenders** and notifications
+- **Milk unions** and dairy farmer services
+- **Complaints** and customer care
+
+Type your question in your own words.`,
   },
 ];
 

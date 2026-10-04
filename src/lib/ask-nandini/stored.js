@@ -12,14 +12,24 @@ const normalise = (s) =>
     .replace(/[?!.。,]+$/g, '')
     .replace(/\s+/g, ' ')
     .trim();
+// For `match` patterns: also drop punctuation inside the message ("ok, thank-you!!" -> "ok thankyou").
+const loose = (s) => normalise(s).replace(/[,.!?'’"\-_:;()]+/g, '').replace(/\s+/g, ' ').trim();
 
 const INDEX = new Map();
 for (const r of STORED_REPLIES) for (const q of r.questions) INDEX.set(normalise(q), r);
+const PATTERNS = STORED_REPLIES.filter((r) => r.match);
 
-// Only the visitor's first message: later ones ("yes", "that one") depend on context.
+// Exact-question replies match only the visitor's first message: later ones
+// ("yes", "that one") depend on context. Replies marked `anytime` (greetings,
+// thanks, goodbye) are context-free and match whenever they are the latest message.
 export function matchStored(history) {
-  if (history.length !== 1 || history[0].role !== 'user') return null;
-  return INDEX.get(normalise(history[0].content)) || null;
+  const last = history[history.length - 1];
+  if (!last || last.role !== 'user') return null;
+  const text = normalise(last.content);
+  const l = loose(last.content);
+  const r = INDEX.get(text) || INDEX.get(l) || PATTERNS.find((p) => p.match.test(l)) || null;
+  if (!r) return null;
+  return history.length === 1 || r.anytime ? r : null;
 }
 
 const short = (t, n = 110) => {

@@ -122,3 +122,23 @@ Fixes made because of the browser run:
 - Page views on in-site navigation arrive ~5–6 s after the click (GA4 batching); that's normal.
 
 Still best checked by a person on the preview: the overall look, the real contact-form email, and GA4 DebugView with the real property (`docs/DEPLOY_AND_ROLLBACK.md`).
+
+---
+
+## 4 Oct 2026 — website forms, complaint tickets, Ask Nandini updates
+
+Applied on top of the developer's repo (`kmf-nandini-main-01-10-26`, which already contains the 1 Oct zip plus the home-page notification carousel). Details: `docs/FORMS.md`, `docs/ASK_NANDINI.md`.
+
+| Change | Files | Notes |
+|---|---|---|
+| **Dealer / parlour / agency / franchise application** page (en + kn), reference number `KMF-D-…` | `src/app/[locale]/dealership/`, `src/app/api/forms/dealer/` | Stored in Supabase `dealer_applications` |
+| **"Notify me when available"** page (en + kn): PIN code → state, products, contact | `src/app/[locale]/notify-me/`, `src/app/api/forms/demand/`, `src/lib/forms/pincode.js` | Stored in `demand_requests`; demand by state/city on the admin page |
+| **Complaint tickets** with optional photo, ticket `KMF-C-…`, public status check | `src/app/[locale]/complaint/`, `src/app/api/forms/complaint/`, `src/lib/forms/complaints.js` | `complaints` table + private bucket `complaint-photos` |
+| **Admin page** `/admin/forms` (same password as `/admin/ask-nandini`): lists, status/notes, photos, CSV, demand summary | `src/app/admin/forms/` | No emails: data is read here. Optional weekly email report off unless `FORMS_NOTIFY_TO` is set |
+| Ask Nandini: `check_complaint_status` tool, prompt facts for the three pages, stored replies link to them, greetings/thanks/goodbye answered without Claude at any point in the chat | `src/lib/ask-nandini/tools.js`, `prompt.js`, `stored.js`, `src/configtext/askNandini*.js` | |
+| Admin: all questions list with search, paging and CSV export (2 Oct) | `src/app/admin/ask-nandini/` | |
+| Header menus (en + kn) and sitemap link the three new pages | `src/configtext/header.js`, `src/components/Header.js`, `src/app/sitemap.js`, `src/lib/seo.js` | |
+| Supabase: `docs/forms-supabase.sql` **already applied** to project `kmf-ask-nandini` on 4 Oct | `docs/forms-supabase.sql` | Nothing to run |
+| Vercel cron (Monday 09:00 IST) for the optional demand email; harmless while off | `vercel.json`, `src/app/api/cron/demand-report/` | |
+
+Verification: `next build` ✅, `next lint` ✅ (0 errors on changed files), forms/API/admin exercised against both the in-memory store and the live Supabase project (test rows removed). Kannada text in `src/configtext/forms.js` still needs a native review.

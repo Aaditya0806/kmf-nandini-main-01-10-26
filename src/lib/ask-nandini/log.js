@@ -70,6 +70,48 @@ export async function adminData(days = 30) {
   return { days: d, source: 'supabase', summary, top, unanswered, down };
 }
 
+export const PAGE_SIZE = 50;
+const LIST_COLS = 'id,created_at,question,answer,lang,page,model,tools,answered,fallback,feedback';
+const safeDays = (days) => Math.min(Math.max(parseInt(days, 10) || 30, 1), RETENTION_DAYS);
+// PostgREST filter value: keep it simple and escape the characters it treats specially.
+const likeTerm = (q) => `*${String(q).replace(/[%*,.()"\\]/g, ' ').trim().replace(/\s+/g, '*')}*`;
+
+// Every question in the period, newest first, optionally filtered by a search
+// term (matches question or answer). Paged: { rows, total, page, pages }.
+export async function listQuestions({ days = 30, page = 1, q = '', pageSize = PAGE_SIZE } = {}) {
+  const d = safeDays(days);
+  const term = String(q || '').trim().slice(0, 100);
+  const p = Math.max(parseInt(page, 10) || 1, 1);
+  const since = new Date(Date.now() - d * 86400e3).toISOString();
+
+  if (!supabaseConfigured()) {
+    const all = mem.filter((r) => Date.parse(r.created_at) > since && (!term || `${r.question} ${r.answer || ''}`.toLowerCase().includes(term.toLowerCase())));
+    return { rows: all.slice((p - 1) * pageSize, p * pageSize), total: all.length, page: p, pages: Math.max(1, Math.ceil(all.length / pageSize)), q: term };
+  }
+  const search = term ? `&or=(question.ilike.${encodeURIComponent(likeTerm(term))},answer.ilike.${encodeURIComponent(likeTerm(term))})` : '';
+  const { data, total } = await sb(
+    `ask_nandini_log?select=${LIST_COLS}&created_at=gt.${since}${search}&order=created_at.desc&limit=${pageSize}&offset=${(p - 1) * pageSize}`,
+    { timeoutMs: 10000, withCount: true }
+  );
+  return { rows: data || [], total, page: p, pages: Math.max(1, Math.ceil(total / pageSize)), q: term };
+}
+
+// All rows for a CSV download. Supabase returns at most 1,000 rows per request,
+// so fetch in chunks (up to 20,000 rows per export).
+export async function exportQuestions(days = 30) {
+  const d = safeDays(days);
+  const since = new Date(Date.now() - d * 86400e3).toISOString();
+  if (!supabaseConfigured()) return mem.filter((r) => Date.parse(r.created_at) > since);
+  const CHUNK = 1000;
+  const rows = [];
+  for (let offset = 0; offset < 20000; offset += CHUNK) {
+    const batch = (await sb(`ask_nandini_log?select=${LIST_COLS}&created_at=gt.${since}&order=created_at.desc&limit=${CHUNK}&offset=${offset}`, { timeoutMs: 20000 })) || [];
+    rows.push(...batch);
+    if (batch.length < CHUNK) break;
+  }
+  return rows;
+}
+
 function memAdmin(d) {
   const since = Date.now() - d * 86400e3;
   const rows = mem.filter((r) => Date.parse(r.created_at) > since);
