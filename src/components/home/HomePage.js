@@ -14,6 +14,7 @@ import { useMyContext } from '@/context/headerContext.js';
 import { homeText, FEATURE_CARDS, QUICK_LINKS } from '@/configtext/home';
 import { notices as fallbackNotices } from '@/app/tenter-home.js';
 import { FeatureCard, QuickLink } from './Cards';
+import Wave from './Wave';
 
 import cert1 from '@/images/homeImages/certi/NABL_24b98112d5.jpg';
 import cert2 from '@/images/homeImages/certi/FSSAI_5e558596c3.png';
@@ -118,18 +119,19 @@ export default function HomePage({ locale = 'en' }) {
   return (
     <div className={`absolute z-[-1] h-full w-full ${isScroll ? 'top-[170px] md:top-48' : ''}`}>
       {/* ---------- Hero ---------- */}
-      <section className="relative w-full bg-primary-darker">
+      <section className="relative w-full overflow-hidden bg-primary-darker">
+        <Wave position="bottom" fill="#F0F7FF" profile="a" className="z-[2]" />
         <div className="relative aspect-video w-full overflow-hidden bg-black md:max-h-screen">
           <video className="absolute inset-0 h-full w-full object-contain" src="/video/banner2026.mp4" muted autoPlay loop playsInline aria-hidden="true" />
           <div className="absolute inset-0 hidden bg-gradient-to-t from-black/80 via-black/15 to-transparent md:block" aria-hidden="true" />
-          <a href="#explore" className="absolute bottom-4 left-1/2 hidden -translate-x-1/2 text-white/80 motion-safe:animate-bounce md:block" aria-label="Scroll down">
+          <a href="#explore" className="absolute bottom-24 left-1/2 hidden -translate-x-1/2 text-white/80 motion-safe:animate-bounce md:block" aria-label="Scroll down">
             <FaChevronDown size={22} />
           </a>
         </div>
         {/* Phones: a card that overlaps the bottom of the video, on a milk-splash ground. Desktop: text over the video. */}
-        <div className="relative overflow-hidden bg-gradient-to-b from-[#0b3d7a] to-primary-darker px-5 pb-9 pt-7 text-center text-white md:absolute md:inset-0 md:flex md:items-end md:bg-none md:bg-transparent md:p-0 md:text-left md:shadow-none">
+        <div className="relative overflow-hidden bg-gradient-to-b from-[#0b3d7a] to-primary-darker px-5 pb-16 pt-7 text-center text-white md:absolute md:inset-0 md:flex md:items-end md:bg-none md:bg-transparent md:p-0 md:text-left md:shadow-none">
           <div className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-secondary-main/15 blur-3xl md:hidden" aria-hidden="true" />
-          <div className="relative mx-auto w-full max-w-7xl md:px-6 md:pb-20">
+          <div className="relative mx-auto w-full max-w-7xl md:px-6 md:pb-32">
             <Fade bottom>
               <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-secondary-lighter md:text-sm md:tracking-[0.25em]">{t.eyebrow}</p>
               <h1 className="mx-auto mt-4 max-w-3xl font-heading text-[26px] uppercase leading-[1.15] text-white md:mx-0 md:mt-3 md:text-4xl md:drop-shadow lg:text-6xl">{t.welcome}</h1>
@@ -194,7 +196,8 @@ export default function HomePage({ locale = 'en' }) {
 
       {/* ---------- About ---------- */}
       <ParallaxBanner layers={[{ image: '/images/home-about.png', speed: -20 }]} className="w-full">
-        <section className="w-full px-4 py-16 md:py-24">
+        <section className="relative w-full px-4 pb-16 pt-24 md:pb-24 md:pt-36">
+          <Wave position="top" fill="#F0F7FF" profile="b" />
           <div className="mx-auto max-w-7xl">
             <SectionTitle eyebrow={t.aboutEyebrow} title="KMF Nandini" light />
             <div className="mt-10 grid gap-6 md:grid-cols-2">
@@ -221,7 +224,8 @@ export default function HomePage({ locale = 'en' }) {
       </ParallaxBanner>
 
       {/* ---------- Know your milk (designed image, no text) ---------- */}
-      <section className="w-full bg-white" aria-label={t.knowYourMilk}>
+      <section className="relative w-full bg-white" aria-label={t.knowYourMilk}>
+        <Wave position="bottom" fill="#ffffff" profile="a" />
         <picture>
           <source media="(max-width: 767px)" srcSet="/images/know-your-milk-nandini-mobile.webp" />
           <img loading="lazy" decoding="async" src="/images/know-your-milk-nandini.webp" alt={t.knowYourMilk} className="block h-auto w-full" />
@@ -278,7 +282,8 @@ export default function HomePage({ locale = 'en' }) {
       </section>
 
       {/* ---------- Quick links ---------- */}
-      <section className="relative w-full overflow-hidden bg-primary-subtle py-16 md:py-24">
+      <section className="relative w-full overflow-hidden bg-primary-subtle pb-16 pt-24 md:pb-24 md:pt-36">
+        <Wave position="top" fill="#ffffff" profile="b" />
         <div className="pointer-events-none absolute -left-24 top-10 h-72 w-72 rounded-full bg-secondary-main/20 blur-3xl" aria-hidden="true" />
         <div className="pointer-events-none absolute -right-24 bottom-0 h-80 w-80 rounded-full bg-primary-main/15 blur-3xl" aria-hidden="true" />
         <div className="relative">
@@ -294,7 +299,8 @@ export default function HomePage({ locale = 'en' }) {
       </section>
 
       {/* ---------- Our story (video) ---------- */}
-      <section className="w-full bg-white py-16 md:py-24">
+      <section className="relative w-full bg-white pb-16 pt-24 md:pb-24 md:pt-36">
+        <Wave position="top" fill="#F0F7FF" profile="a" />
         <SectionTitle eyebrow={t.storyEyebrow} title={t.ourStory} />
         <div className="mx-auto mt-10 max-w-5xl px-4">
           <div className="aspect-video w-full overflow-hidden rounded-2xl shadow-xl">
@@ -312,7 +318,8 @@ export default function HomePage({ locale = 'en' }) {
       </section>
 
       {/* ---------- Certificates ---------- */}
-      <section className="w-full bg-primary-subtle py-16 md:py-24">
+      <section className="relative w-full bg-primary-subtle pb-16 pt-24 md:pb-24 md:pt-36">
+        <Wave position="top" fill="#ffffff" profile="b" />
         <SectionTitle eyebrow={t.certEyebrow} title={t.certificates} />
         <div className="mx-auto mt-10 max-w-6xl px-4">
           <Swiper watchSlidesProgress slidesPerView={2} spaceBetween={16} breakpoints={{ 768: { slidesPerView: 3, spaceBetween: 24 }, 1024: { slidesPerView: 4, spaceBetween: 24 } }} autoplay={{ delay: 2500, disableOnInteraction: false }} loop={certs.length > 4} modules={[FreeMode, Autoplay]} className="w-full">

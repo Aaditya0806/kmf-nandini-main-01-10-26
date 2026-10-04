@@ -174,3 +174,4 @@ Follow-up on the same day after local review (all on `feat/landing-redesign`):
 - New FSSC 22000 logo.
 - Header top strip: logos left, address and phone with icon badges, language pill and social icons right; cleaner phone layout.
 - Navigation: even spacing, chevrons on menus, plain navy submenus with dividers (hover = pale yellow text, as before); Virtual Tour outlined; no pulse animation.
+- Wave-shaped section edges on the home page (hero video, Explore, About, Know your milk, Quick links, Our story, Certificates), like amul.com.
