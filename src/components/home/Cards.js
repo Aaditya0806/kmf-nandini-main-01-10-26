@@ -15,12 +15,32 @@ export function FeatureCard({ imgUrl, title, href }) {
   );
 }
 
-// Quick-link tile.
-export function QuickLink({ icon, title, href }) {
+// Quick-link card: icon, title, one-line description, arrow. `featured` = large image card.
+export function QuickLink({ icon, title, desc, href, featured = false, image, className = '' }) {
+  if (featured) {
+    return (
+      <Link href={href} className="group relative col-span-2 flex min-h-[260px] flex-col justify-end overflow-hidden rounded-3xl bg-primary-darker p-6 text-white shadow-lg transition-transform duration-300 hover:-translate-y-1 md:row-span-2 md:min-h-0 md:p-8">
+        {image && <img loading="lazy" decoding="async" src={image} alt="" className="absolute inset-0 h-full w-full object-cover opacity-80 transition-transform duration-700 group-hover:scale-105" />}
+        <span className="absolute inset-0 bg-gradient-to-t from-primary-darker via-primary-darker/40 to-transparent" aria-hidden="true" />
+        <span className="relative">
+          <span className="flex h-12 w-12 items-center justify-center rounded-full bg-secondary-main text-primary-darker">{icon}</span>
+          <span className="mt-4 block font-heading text-xl uppercase leading-tight md:text-3xl">{title}</span>
+          <span className="mt-2 block max-w-sm text-sm text-white/85 md:text-base">{desc}</span>
+          <span className="mt-4 inline-flex items-center gap-2 text-sm font-bold uppercase tracking-wide text-secondary-lighter">
+            <span>→</span>
+          </span>
+        </span>
+      </Link>
+    );
+  }
   return (
-    <Link href={href} className="group flex flex-col items-center gap-3 rounded-2xl border border-neutral-light1 bg-white p-4 text-center shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-primary-main hover:shadow-md md:p-6">
-      <span className="flex h-14 w-14 items-center justify-center rounded-full bg-primary-subtle text-primary-main transition-colors group-hover:bg-primary-main group-hover:text-white md:h-20 md:w-20">{icon}</span>
-      <span className="text-xs font-semibold text-gray-800 md:text-base">{title}</span>
+    <Link href={href} className={`group flex flex-col gap-3 rounded-3xl border border-neutral-light1 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-primary-main hover:shadow-lg ${className}`}>
+      <span className="flex h-11 w-11 items-center justify-center rounded-full bg-primary-subtle text-primary-main transition-colors group-hover:bg-primary-main group-hover:text-white md:h-12 md:w-12">{icon}</span>
+      <span className="block text-sm font-bold leading-snug text-gray-900 md:text-base">{title}</span>
+      <span className="block text-xs leading-relaxed text-neutral-dark2 md:text-sm">{desc}</span>
+      <span className="mt-auto text-sm font-bold text-primary-main transition-transform group-hover:translate-x-1" aria-hidden="true">
+        →
+      </span>
     </Link>
   );
 }

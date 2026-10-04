@@ -26,6 +26,7 @@ import ytIco from '@/images/footer/yt.svg';
 import { FaLocationDot } from "react-icons/fa6";
 import useApi from '@/hooks/useApi';
 import { useParams, usePathname } from 'next/navigation';
+import { IoChevronDown } from 'react-icons/io5';
 import { useRouter } from 'next/navigation';
 import { useMyContext } from '@/context/headerContext';
 import { RiMenuAddFill } from "react-icons/ri";
@@ -229,132 +230,91 @@ const productMegaMenu = {
 
         <div className={`w-full `}>
           <div
-            className={`w-full h-[120px] md:h-[150px] relative   bg-white p-2 md:p-10 flex justify-between items-center ${headerPathname?'hidden':''}  `}
+            className={`relative flex h-[120px] w-full items-center justify-between gap-3 bg-white px-3 md:h-[150px] md:px-8 ${headerPathname ? 'hidden' : ''}`}
             onMouseEnter={() => setOpen(null)}>
-            <div className=" max-w-xl flex justify-center items-center space-x-1  md:space-x-3">
-            <img loading="lazy" decoding="async"
-          src={locale === 'kn' ? logokn.src : logo.src} // Use rotated logo when rotateLogo is true
-          alt="logo-home"
-          className={`w-[70px] sm:w-[150px] ${rotateLogo ? '' : ''}`} // Apply rotation class
-        />
-              <p className={`font-extrabold font-heading   ${locale==='kn'?'text-[12px] sm:text-[18px]':'text-[9px] sm:text-[14px]'}`}>
-                {headerItem?.attributes?.title}
-              </p>
-
-              <img loading="lazy" decoding="async" className='w-14 h-14 md:w-28 md:h-28' src={corpoLogo.src} alt="" />
+            {/* Brand */}
+            <div className="flex items-center gap-3 md:gap-5">
+              <Link href={`/${locale}`} aria-label="KMF Nandini" className="shrink-0">
+                <img loading="lazy" decoding="async" src={locale === 'kn' ? logokn.src : logo.src} alt="logo-home" className="w-[76px] sm:w-[140px]" />
+              </Link>
+              {headerItem?.attributes?.title && (
+                <p className={`font-extrabold font-heading text-primary-darker ${locale === 'kn' ? 'text-[12px] sm:text-[18px]' : 'text-[9px] sm:text-[14px]'}`}>{headerItem.attributes.title}</p>
+              )}
+              <img loading="lazy" decoding="async" className="hidden h-14 w-14 sm:block md:h-24 md:w-24" src={corpoLogo.src} alt="International Year of Cooperatives 2025" />
             </div>
-            
 
-
-            <div className="flex md:flex-col h-full md:h-fit flex-col-reverse   ">
-              <div className="flex justify-center items-end space-x-5">
-                <div className="  hidden lg:flex lg:flex-col  justify-start items-start space-y-2    ">
-                  <div className="w-full flex space-x-5">
-                    <div className="flex justify-center items-center      ">
-                      <div className="mr-2">
-                     <MdLocationOn size={30} color='red' className='transition-all duration-150 hover:scale-[1.1] cursor-pointer'/>
-                      </div>
-
-                      <p className={` font-heading flex flex-col font-black/10 ${locale==='kn'?'text-[15px]':'text-[12px]'}  `}>
-                        {headerItem?.attributes?.address?.map((item, id) => {
-                          return (
-                            <span key={id} className="block">
-                              {item?.children[0]?.text}
-                            </span>
-                          );
-                        })}
-                        {/* <span  className="block">
-                          12915, KMF Complex,</span>
-                          <span>
-Bengaluru - 560 029
-                        </span> */}
-                      </p>
-                    </div>
-
-                    <div className="flex space-x-5 justify-center p-2  items-center">
-                      <Link
-                        href={'https://www.facebook.com/kmfnandini.coop'}
-                        className="hover:scale-125 transition-all duration-300">
-                        <img loading="lazy" decoding="async" src={facebookIco.src} className="w-7" />
-                      </Link>
-                      <Link
-                        href={'https://twitter.com/kmfnandinimilk'}
-                        className="hover:scale-125 transition-all duration-300">
-                        <img loading="lazy" decoding="async" src={twitterIco.src} className="w-7" />
-                      </Link>
-                      <Link
-                        href={`/${locale}/contact`}
-                        className="hover:scale-125 transition-all duration-300">
-                        {' '}
-                        <img loading="lazy" decoding="async" src={mailIco.src} className="w-7" />
-                      </Link>
-                      <Link
-                        href={
-                          'https://www.instagram.com/kmfnandini.coop?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=='
-                        }
-                        className="hover:scale-125 transition-all duration-300">
-                        {' '}
-                        <img loading="lazy" decoding="async" src={insta.src} className="w-7" />
-                      </Link>
-                      <Link
-                        href={
-                          'https://www.youtube.com/@kmfnandini12'
-                        }
-                        className="hover:scale-125 transition-all duration-300">
-                        {' '}
-                        <img loading="lazy" decoding="async" src={ytIco.src} className="w-7" />
-                      </Link>
-                    </div>
-                  </div>
-
-                  <div className="flex justify-center items-center   ">
-                    <div className='mr-2'>
-                     <MdCall size={30} color='#30ABDC' className='transition-all duration-150 hover:scale-[1.1] cursor-pointer'/>
-                    </div>
-                    <p className="text-[12px] w-[350px] font-heading  font-black/10 ">
-                      {headerItem?.attributes?.time?.map((item, id) => {
-                        return (
-                          <span key={id} className="block ">
-                            {item?.children[0]?.text}
-                          </span>
-                        );
-                      })}
-                      {/* <span  className="block ">
-                            1800 425 8030 toll free 
-                          </span>
-                          <span  className="block ">
-                            10:00 AM - 5:45 PM
-                          </span>
-                          <span  className="block ">
-                            Except on Second Saturday and Fourth
-                          </span>
-                          <span  className="block ">
-                            Saturday, Sunday & State Govt. Holidays
-                          </span> */}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex flex-col justify-between  space-y-3">
-                  <button
-                    className="bg-primary-main  w-16 h-5 md:w-[100px] md:h-[36px]  text-neutral-light4 text-xs font-semibold rounded-md "
-                    onClick={handleLanguageChange}>
-                    {locale === 'en' ? 'ಕನ್ನಡ' : 'English'}
-                  </button>
-                </div>
+            {/* Contact cluster: desktop only */}
+            <div className="hidden items-center gap-5 pr-24 lg:flex xl:gap-7">
+              <div className="flex items-center gap-3">
+                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-red-50 text-red-600">
+                  <MdLocationOn size={24} />
+                </span>
+                <p className="text-[13px] font-semibold leading-snug text-gray-800">
+                  {headerItem?.attributes?.address?.map((item, id) => (
+                    <span key={id} className="block">
+                      {item?.children[0]?.text}
+                    </span>
+                  ))}
+                </p>
               </div>
 
-              <p className="text-sm text-red-600 font-bold flex justify-end pt-4 marquee-notification overflow-hidden">
-                {latestNews ? latestNews?.attributes?.title : ''}
-              </p>
+              <span className="h-12 w-px bg-neutral-light1" aria-hidden="true" />
+
+              <div className="flex items-center gap-3">
+                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-primary-subtle text-primary-main">
+                  <MdCall size={22} />
+                </span>
+                <p className="max-w-[300px] text-[12px] leading-snug text-gray-600">
+                  {headerItem?.attributes?.time?.map((item, id) => (
+                    <span key={id} className={`block ${id === 0 ? 'text-[15px] font-extrabold text-primary-darker' : ''}`}>
+                      {item?.children[0]?.text}
+                    </span>
+                  ))}
+                </p>
+              </div>
+
+              <span className="h-12 w-px bg-neutral-light1" aria-hidden="true" />
+
+              <div className="flex flex-col items-end gap-2">
+                <button
+                  type="button"
+                  className="rounded-full border-2 border-primary-main px-4 py-1.5 text-sm font-bold text-primary-main transition-colors hover:bg-primary-main hover:text-white"
+                  onClick={handleLanguageChange}>
+                  {locale === 'en' ? 'ಕನ್ನಡ' : 'English'}
+                </button>
+                <div className="flex items-center gap-2">
+                  {[
+                    ['https://www.facebook.com/kmfnandini.coop', facebookIco.src, 'Facebook'],
+                    ['https://twitter.com/kmfnandinimilk', twitterIco.src, 'X'],
+                    [`/${locale}/contact`, mailIco.src, 'Contact'],
+                    ['https://www.instagram.com/kmfnandini.coop?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==', insta.src, 'Instagram'],
+                    ['https://www.youtube.com/@kmfnandini12', ytIco.src, 'YouTube'],
+                  ].map(([href, src, name]) => (
+                    <Link key={name} href={href} aria-label={name} className="rounded-full p-1 transition-transform duration-200 hover:scale-110">
+                      <img loading="lazy" decoding="async" src={src} alt="" className="h-6 w-6" />
+                    </Link>
+                  ))}
+                </div>
+              </div>
             </div>
+
+            {/* Phones and tablets: language toggle only */}
+            <div className="flex items-center pr-20 lg:hidden">
+              <button type="button" className="rounded-full border-2 border-primary-main px-3 py-1 text-xs font-bold text-primary-main" onClick={handleLanguageChange}>
+                {locale === 'en' ? 'ಕನ್ನಡ' : 'English'}
+              </button>
+            </div>
+
+            {latestNews?.attributes?.title && (
+              <p className="marquee-notification absolute bottom-1 left-3 right-3 overflow-hidden text-xs font-bold text-red-600 md:left-auto md:w-1/2">{latestNews.attributes.title}</p>
+            )}
           </div>
 
           {/* MAIN HEADER DOWN  */}
 
           <div className={`w-full    ${isSticky ? 'sticky-header  bg-[#06498a63]':'bg-primary-gradient'} `}>
             <div
-              className={`w-full max-w-[85%] h-[50px]  m-auto p-5 z-20 relative   `}>
+              className={`relative z-20 m-auto h-[50px] w-full max-w-[85%] p-5 lg:max-w-[97%] lg:px-2 2xl:max-w-[88%]`}>
               <div className=" w-full h-full flex justify-between items-center lg:hidden ">
                 <div onClick={() => setOpenNav((prev) => !prev)}>
                       <RiMenuAddFill size={30} color='white'/>
@@ -362,7 +322,7 @@ Bengaluru - 560 029
               </div>
 
               <div className="w-full h-full hidden lg:block   ">
-                <ul className=" h-full w-full text-light-light4 flex   space-x-2 items-center text-[12px]">
+                <ul className="flex h-full w-full items-center justify-between font-semibold uppercase tracking-wide text-white">
                   {headItem?.map((header, i) => {
                     const isProductMenu =
                     header.title === "OUR PRODUCTS";
@@ -373,34 +333,39 @@ Bengaluru - 560 029
                     const isVirtual=header.title==='VIRTUAL TOUR'|| header.title==='ವರ್ಚುವಲ್ ಟೂರ್'
                    
                     
+                      const route = typeof isLink === 'string' ? isLink.replace(/^\/(en|kn)/, '').split('?')[0] : '';
+                      const here = typeof pathname === 'string' ? pathname.replace(/^\/(en|kn)/, '') : '';
+                      const isActive = !!route && route !== '/' && here.startsWith(route);
                       return (
-                        <Link
-                          href={isLink ? isLink : '#'}
-                          target={isVirtual?'_blank':'_self'}
+                        <li
                           key={i}
-                          className={` transition-all duration-300 hover:scale-[1.1] ${isVirtual?'pluse':''} ${header.wideOnly ? 'hidden min-[1440px]:block' : ''}`}>
-                          <li
-                            className="  text-[8px] sm:text-[10px] lg:text-[12px]  border-light-light4 pl-2 pr-2 relative hover:text-secondary-lighter "
-                            onMouseEnter={() => setOpen(hasItems ? i : null)}>
-                            {header.title}
+                          className={`relative flex h-full min-w-0 items-center ${header.wideOnly ? 'hidden min-[1440px]:flex' : ''}`}
+                          onMouseEnter={() => setOpen(hasItems ? i : null)}>
+                          <Link
+                            href={isLink ? isLink : '#'}
+                            target={isVirtual ? '_blank' : '_self'}
+                            className={`relative flex h-full items-center justify-center gap-1 px-1.5 py-1 text-center text-[10.5px] leading-[1.2] transition-colors hover:text-secondary-lighter xl:px-2.5 xl:text-[12px] ${isVirtual ? '!h-auto whitespace-nowrap border border-white/70 !px-3 !py-1.5 hover:border-secondary-lighter' : ''} ${open === i || isActive ? 'text-secondary-lighter' : ''}`}>
+                            <span className="max-w-[9.5rem]">{header.title}</span>
+                            {hasItems ? <IoChevronDown size={12} className={`transition-transform ${open === i ? 'rotate-180' : ''}`} aria-hidden="true" /> : null}
+                          </Link>
                             {hasItems && (
                               <div>
                                 {isProductMenu?
 
                                 <div
-                                className={`bg-primary-darker z-50 absolute  flex  top-[2.71rem] left-[20px] w-[810px] overflow-auto  ${
+                                className={`absolute left-0 top-[2.71rem] z-50 flex w-[810px] border-t-2 border-white/40 bg-primary-darker normal-case tracking-normal shadow-lg ${
                                   open === i ? 'visible' : 'invisible'
-                                }  `}
+                                }`}
                                 onMouseLeave={() => setOpen(null)}>
         {/* LEFT CATEGORY LIST */}
-        <div className="w-[200px] bg-primary-darker p-4">
-          <ul className="space-y-3 text-sm overflow-y-auto max-h-[400px]">
+        <div className="w-[220px] bg-primary-darker p-3">
+          <ul className="max-h-[400px] space-y-0.5 overflow-y-auto text-sm">
             {/* {header.subItems?.map((subItem, idx) => {
                                   
                                     return (
                                       <Link
                                         href={subItem?.link || ''}
-                                        className="text-[12px] text-white block hover:text-secondary-lighter"
+                                        className="block px-2 py-1.5 text-[13px] font-bold text-white hover:text-secondary-lighter"
                                         key={idx}
                                         onClick={() => setOpen(null)}>
                                         <li key={idx}>
@@ -413,7 +378,7 @@ Bengaluru - 560 029
                                     );
                                   })} */}
                                   <Link href={`/${locale}/our-product/`} >
-                                  <li className="text-[12px] text-white block hover:text-secondary-lighter" >
+                                  <li className="block px-2 py-1.5 text-[13px] font-bold text-white hover:text-secondary-lighter" >
                                           All Products
                                           
                                           </li>
@@ -423,7 +388,7 @@ Bengaluru - 560 029
                                     return (
                                       <Link
                                         href={`/${locale}/our-product/${subItem.id}`}
-                                        className="ml-2  text-[11px] text-white block hover:text-secondary-lighter"
+                                        className="block px-2 py-1 text-[12px] text-white/90 hover:text-secondary-lighter"
                                         key={idx}
                                         onClick={() => setOpen(null)}>
                                         <li key={idx} className='uppercase'>
@@ -436,13 +401,13 @@ Bengaluru - 560 029
                                     );
                                   })}
                                     <Link href={`/${locale}/nandini-recipes/`} >
-                                  <li className='text-[12px] mt-2 text-white block hover:text-secondary-lighter'>
+                                  <li className='mt-2 block border-t border-white/15 px-2 pt-2 text-[12px] text-white/90 hover:text-secondary-lighter'>
 
                                   Nandini Recipes
                                   </li>
                                   </Link>
                                    <Link href={`/${locale}/contact?category=bulk-order`}>
-                                  <li className='text-[12px] mt-1 text-white block hover:text-secondary-lighter'>
+                                  <li className='block px-2 py-1 text-[12px] text-white/90 hover:text-secondary-lighter'>
                             
                                     Bulk Order
                                   </li>
@@ -453,7 +418,7 @@ Bengaluru - 560 029
                                     ['complaint', 'File a Complaint'],
                                   ].map(([slug, title]) => (
                                     <Link key={slug} href={`/${locale}/${slug}`} onClick={() => setOpen(null)}>
-                                      <li className="text-[12px] mt-1 text-white block hover:text-secondary-lighter">{title}</li>
+                                      <li className="block px-2 py-1 text-[12px] text-white/90 hover:text-secondary-lighter">{title}</li>
                                     </Link>
                                   ))}
             
@@ -491,27 +456,21 @@ Bengaluru - 560 029
 
                                 
                                 <div
-                                className={`p-4 bg-primary-darker z-50 absolute   top-[2.71rem] left-[20px] w-[200px] overflow-auto max-h-[300px] ${
+                                className={`absolute left-0 top-[2.71rem] z-50 w-[250px] border-t-2 border-white/40 bg-primary-darker normal-case tracking-normal shadow-lg ${
                                   open === i ? 'visible' : 'invisible'
-                                }  `}
+                                }`}
                                 onMouseLeave={() => setOpen(null)}>
-                                  
-                                  <ul className="w-full  space-y-4 text-white">
+                                  <ul className="max-h-[360px] w-full divide-y divide-white/10 overflow-auto">
                                   {header.subItems?.map((subItem, idx) => {
-                                  
                                     return (
-                                      <Link
-                                        href={subItem?.link || ''}
-                                        className="text-[12px] block hover:text-secondary-lighter"
-                                        key={idx}
-                                        onClick={() => setOpen(null)}>
-                                        <li key={idx}>
+                                      <li key={idx}>
+                                        <Link
+                                          href={subItem?.link || ''}
+                                          className="block px-4 py-2.5 text-[13px] text-white transition-colors hover:bg-white/10 hover:text-secondary-lighter"
+                                          onClick={() => setOpen(null)}>
                                           {subItem.title}
-                                          
-
-                                       
-                                          </li>
-                                      </Link>
+                                        </Link>
+                                      </li>
                                     );
                                   })}
                                 </ul>
@@ -523,11 +482,8 @@ Bengaluru - 560 029
                               
                               </div>
                             )}
-                          </li>
-                        </Link>
+                        </li>
                       );
-                     
-                  
                   })}
                 </ul>
               </div>

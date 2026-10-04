@@ -3,11 +3,11 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Fade from 'react-reveal/Fade';
-import { Swiper, SwiperSlide, useSwiper } from 'swiper/react';
-import { Navigation, Pagination, Scrollbar, A11y, EffectCoverflow, Autoplay, FreeMode } from 'swiper/modules';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination, A11y, EffectCoverflow, Autoplay, FreeMode } from 'swiper/modules';
 import { ParallaxBanner } from 'react-scroll-parallax';
 import { useQuery } from '@tanstack/react-query';
-import { FaShoppingCart, FaMapMarkerAlt, FaVideo, FaStore, FaBell, FaRegCommentDots, FaBriefcase, FaBoxOpen, FaChevronDown, FaRegHandPointRight } from 'react-icons/fa';
+import { FaShoppingCart, FaMapMarkerAlt, FaVideo, FaStore, FaBell, FaRegCommentDots, FaBriefcase, FaBoxOpen, FaChevronDown } from 'react-icons/fa';
 import Footer from '@/components/Footer';
 import useApi from '@/hooks/useApi.js';
 import { useMyContext } from '@/context/headerContext.js';
@@ -15,22 +15,16 @@ import { homeText, FEATURE_CARDS, QUICK_LINKS } from '@/configtext/home';
 import { notices as fallbackNotices } from '@/app/tenter-home.js';
 import { FeatureCard, QuickLink } from './Cards';
 
-import milkglassImg from '@/images/homeImages/milkglass.png';
-import milkglassKnImg from '@/images/homeImages/milk-glass-kn.png';
 import cert1 from '@/images/homeImages/certi/NABL_24b98112d5.jpg';
 import cert2 from '@/images/homeImages/certi/FSSAI_5e558596c3.png';
 import cert3 from '@/images/homeImages/certi/download_1_c196cc66d7.png';
-import cert4 from '@/images/homeImages/certi/FSSC_bb32b0de10.png';
-import feat1 from '@/images/homeImages/feat/Ksheera_Sagara_white.png';
+import cert4 from '@/images/homeImages/certi/fssc-22000.png';
+import feat1 from '@/images/homeImages/feat/ksheerasagara-kmf.webp';
 import feat2 from '@/images/homeImages/feat/starpi.jpg';
 import feat3 from '@/images/homeImages/feat/strpi2.jpg';
 import feat4 from '@/images/homeImages/feat/stapi3.jpg';
 import feat5 from '@/images/homeImages/feat/far.jpg';
 import feat6 from '@/images/homeImages/feat/featured1.jpg';
-import know1 from '@/images/homeImages/certi/nutrition.svg';
-import know2 from '@/images/homeImages/certi/importance.svg';
-import know3 from '@/images/homeImages/certi/type.svg';
-import know4 from '@/images/homeImages/certi/age.svg';
 import notiKulfiEn from '@/images/homeImages/notification/Pista-Kulfi-02.jpg';
 import notiKulfiKn from '@/images/homeImages/notification/Pista-Kulfi-kannada.jpg';
 import notiIceEn from '@/images/homeImages/notification/Ice ENG_page-0001.jpg';
@@ -48,16 +42,15 @@ import notiMilk from '@/images/homeImages/image-milk.jpg';
 
 const FEAT = { feat1, feat2, feat3, feat4, feat5, feat6 };
 const ICONS = {
-  products: <FaBoxOpen size={26} />,
-  order: <FaShoppingCart size={26} />,
-  dealer: <FaStore size={26} />,
-  notify: <FaBell size={26} />,
-  complaint: <FaRegCommentDots size={26} />,
-  careers: <FaBriefcase size={26} />,
-  tour: <FaMapMarkerAlt size={26} />,
-  video: <FaVideo size={26} />,
+  products: <FaBoxOpen size={22} />,
+  order: <FaShoppingCart size={22} />,
+  dealer: <FaStore size={22} />,
+  notify: <FaBell size={22} />,
+  complaint: <FaRegCommentDots size={22} />,
+  careers: <FaBriefcase size={22} />,
+  tour: <FaMapMarkerAlt size={22} />,
+  video: <FaVideo size={22} />,
 };
-const KNOW_ICONS = [know1, know2, know4, know3];
 const LOCAL_CERTS = [cert1, cert2, cert3, cert4];
 
 const fetchJson = (axios, path) => axios.get(path).then((r) => r.data);
@@ -76,18 +69,6 @@ function SectionTitle({ eyebrow, title, sub, light = false }) {
 const btnPrimary = 'inline-flex min-h-[44px] items-center justify-center rounded-full bg-secondary-main px-5 text-xs md:min-h-[48px] md:px-7 md:text-sm font-bold uppercase tracking-wide text-primary-darker shadow-lg transition-all hover:-translate-y-0.5 hover:bg-secondary-lighter md:text-base';
 const btnGhost = 'inline-flex min-h-[44px] items-center justify-center rounded-full border-2 border-white/80 px-5 text-xs md:min-h-[48px] md:px-7 md:text-sm font-bold uppercase tracking-wide text-white transition-all hover:-translate-y-0.5 hover:bg-white hover:text-primary-main md:text-base';
 const btnBlue = 'inline-flex min-h-[48px] items-center justify-center rounded-full bg-primary-main px-7 text-sm font-bold uppercase tracking-wide text-white shadow transition-all hover:-translate-y-0.5 hover:bg-primary-darker md:text-base';
-
-// Moves the "Explore" carousel off its first slide after 3 s so the 3D effect is visible.
-function NextSlider() {
-  const swiper = useSwiper();
-  useEffect(() => {
-    if (swiper.activeIndex === 0) {
-      const t = setTimeout(() => swiper.slideTo(1, 1000), 3000);
-      return () => clearTimeout(t);
-    }
-  }, [swiper]);
-  return null;
-}
 
 const fmtDate = (iso, locale) => {
   if (!iso) return '';
@@ -124,39 +105,46 @@ export default function HomePage({ locale = 'en' }) {
 
   const about = homeAbouts?.data?.[0]?.attributes;
   const aboutText = (blocks) => blocks?.map((b) => b?.children?.map((c) => c?.text).join('')).filter(Boolean).join('\n\n') || '';
-  const tenderRows = (tenders?.data || []).map((it) => ({ title: it.attributes?.title?.trim(), lastDate: it.attributes?.last_date })).filter((r) => r.title);
+  const todayIST = new Date(Date.now() + 5.5 * 3600e3).toISOString().slice(0, 10);
+  const tenderRows = (tenders?.data || [])
+    .map((it) => ({ title: it.attributes?.title?.trim(), ref: it.attributes?.c_no?.trim() || '', lastDate: it.attributes?.last_date || '', open: !!it.attributes?.last_date && it.attributes.last_date >= todayIST }))
+    .filter((r) => r.title)
+    .sort((a, b) => Number(b.open) - Number(a.open) || String(b.lastDate).localeCompare(String(a.lastDate)));
   const noticeRows = tenderRows.length ? tenderRows : fallbackNotices.slice(0, 10).map((title) => ({ title }));
   const certImages = certificates?.data?.[0]?.attributes?.image?.data?.map((i) => i?.attributes?.url).filter(Boolean);
   const certs = certImages?.length ? certImages : LOCAL_CERTS.map((c) => c.src);
   const notiImages = [notiMilk, notiGhee, lang === 'kn' ? notiKulfiKn : notiKulfiEn, notiNaturals, lang === 'kn' ? notiIceKn : notiIceEn, notiBanner1, notiBanner];
-  const heroH = isScroll ? 'h-[440px] md:h-[812px]' : 'h-[440px] md:h-screen';
 
   return (
     <div className={`absolute z-[-1] h-full w-full ${isScroll ? 'top-[170px] md:top-48' : ''}`}>
       {/* ---------- Hero ---------- */}
-      <section className={`relative w-full overflow-hidden bg-primary-darker ${heroH}`}>
-        <video className="absolute inset-0 h-full w-full object-cover" src="/video/banner2026.mp4" muted autoPlay loop playsInline aria-hidden="true" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-black/10" aria-hidden="true" />
-        <div className="absolute inset-0 flex items-end">
-          <div className="mx-auto w-full max-w-7xl px-5 pb-10 md:px-6 md:pb-20">
+      <section className="relative w-full bg-primary-darker">
+        <div className="relative aspect-video w-full overflow-hidden bg-black md:max-h-screen">
+          <video className="absolute inset-0 h-full w-full object-contain" src="/video/banner2026.mp4" muted autoPlay loop playsInline aria-hidden="true" />
+          <div className="absolute inset-0 hidden bg-gradient-to-t from-black/80 via-black/15 to-transparent md:block" aria-hidden="true" />
+          <a href="#explore" className="absolute bottom-4 left-1/2 hidden -translate-x-1/2 text-white/80 motion-safe:animate-bounce md:block" aria-label="Scroll down">
+            <FaChevronDown size={22} />
+          </a>
+        </div>
+        {/* Phones: a card that overlaps the bottom of the video, on a milk-splash ground. Desktop: text over the video. */}
+        <div className="relative overflow-hidden bg-gradient-to-b from-[#0b3d7a] to-primary-darker px-5 pb-9 pt-7 text-center text-white md:absolute md:inset-0 md:flex md:items-end md:bg-none md:bg-transparent md:p-0 md:text-left md:shadow-none">
+          <div className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-secondary-main/15 blur-3xl md:hidden" aria-hidden="true" />
+          <div className="relative mx-auto w-full max-w-7xl md:px-6 md:pb-20">
             <Fade bottom>
-              <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-secondary-lighter md:text-sm md:tracking-[0.25em]">{t.eyebrow}</p>
-              <h1 className="mt-2 max-w-3xl font-heading text-2xl uppercase leading-tight text-white drop-shadow md:mt-3 md:text-4xl lg:text-6xl">{t.welcome}</h1>
-              <p className="mt-2 max-w-2xl text-sm text-white/90 md:mt-4 md:text-lg lg:text-xl">{t.heroText}</p>
-              <div className="mt-4 flex flex-wrap gap-3 md:mt-8 md:gap-4">
-                <Link href={href('/our-product')} className={btnPrimary}>
+              <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-secondary-lighter md:text-sm md:tracking-[0.25em]">{t.eyebrow}</p>
+              <h1 className="mx-auto mt-4 max-w-3xl font-heading text-[26px] uppercase leading-[1.15] text-white md:mx-0 md:mt-3 md:text-4xl md:drop-shadow lg:text-6xl">{t.welcome}</h1>
+              <p className="mx-auto mt-3 max-w-2xl text-[15px] leading-relaxed text-white/85 md:mx-0 md:mt-4 md:text-lg lg:text-xl">{t.heroText}</p>
+              <div className="mt-6 grid grid-cols-2 gap-3 md:mt-8 md:flex md:flex-wrap md:gap-4">
+                <Link href={href('/our-product')} className={`${btnPrimary} w-full md:w-auto`}>
                   {t.exploreProducts}
                 </Link>
-                <Link href={href('/contact')} className={btnGhost}>
+                <Link href={href('/contact')} className={`${btnGhost} w-full md:w-auto`}>
                   {t.contactUs}
                 </Link>
               </div>
             </Fade>
           </div>
         </div>
-        <a href="#explore" className="absolute bottom-4 left-1/2 hidden -translate-x-1/2 text-white/80 motion-safe:animate-bounce md:block" aria-label="Scroll down">
-          <FaChevronDown size={22} />
-        </a>
       </section>
 
       {newsHome?.attributes?.important && (
@@ -181,15 +169,18 @@ export default function HomePage({ locale = 'en' }) {
             effect="coverflow"
             grabCursor
             centeredSlides
-            coverflowEffect={{ rotate: 30, stretch: 0, depth: 200, modifier: 1, slideShadows: false }}
-            autoplay={{ delay: 3000, disableOnInteraction: false }}
-            modules={[Navigation, Pagination, Scrollbar, A11y, EffectCoverflow, Autoplay]}
+            initialSlide={2}
+            coverflowEffect={{ rotate: 35, stretch: 0, depth: 220, modifier: 1, slideShadows: false }}
+            autoplay={{ delay: 1800, disableOnInteraction: false, pauseOnMouseEnter: true }}
+            speed={1100}
+            modules={[Navigation, Pagination, A11y, EffectCoverflow, Autoplay]}
             spaceBetween={20}
             slidesPerView={1.25}
             breakpoints={{ 768: { slidesPerView: 3, spaceBetween: 40 } }}
             navigation
             pagination={{ clickable: true }}
             loop
+            loopAdditionalSlides={3}
             className="max-w-7xl"
           >
             {FEATURE_CARDS.map((c) => (
@@ -197,7 +188,6 @@ export default function HomePage({ locale = 'en' }) {
                 <FeatureCard imgUrl={FEAT[c.img].src} title={c[lang]} href={href(c.path)} />
               </SwiperSlide>
             ))}
-            <NextSlider />
           </Swiper>
         </div>
       </section>
@@ -211,13 +201,13 @@ export default function HomePage({ locale = 'en' }) {
               <Fade left>
                 <article className="rounded-2xl border border-white/20 bg-white/10 p-6 text-white backdrop-blur-md md:p-8">
                   <h3 className="font-heading text-lg uppercase text-secondary-lighter md:text-2xl">{t.aboutKmf}</h3>
-                  <p className="mt-4 whitespace-pre-line text-justify text-sm leading-relaxed md:text-base">{aboutText(about?.about1)}</p>
+                  <p className="mt-4 whitespace-pre-line text-left text-sm leading-relaxed md:text-justify md:text-base">{aboutText(about?.about1)}</p>
                 </article>
               </Fade>
               <Fade right>
                 <article className="rounded-2xl border border-white/20 bg-white/10 p-6 text-white backdrop-blur-md md:p-8">
                   <h3 className="font-heading text-lg uppercase text-secondary-lighter md:text-2xl">{t.ourBrand}</h3>
-                  <p className="mt-4 whitespace-pre-line text-justify text-sm leading-relaxed md:text-base">{aboutText(about?.about2)}</p>
+                  <p className="mt-4 whitespace-pre-line text-left text-sm leading-relaxed md:text-justify md:text-base">{aboutText(about?.about2)}</p>
                 </article>
               </Fade>
             </div>
@@ -230,31 +220,12 @@ export default function HomePage({ locale = 'en' }) {
         </section>
       </ParallaxBanner>
 
-      {/* ---------- Know your milk ---------- */}
-      <section className="relative w-full overflow-hidden bg-[#30ABDC]">
-        <img loading="lazy" decoding="async" src="/images/Curve.svg" className="absolute inset-0 hidden h-full w-full object-cover opacity-60 md:block" alt="" />
-        <div className="relative mx-auto grid max-w-7xl items-center gap-8 px-4 py-16 md:grid-cols-2 md:py-24">
-          <Fade left>
-            <div className="flex items-center justify-center">
-              <img loading="lazy" decoding="async" src={lang === 'kn' ? milkglassKnImg.src : milkglassImg.src} className="max-h-[480px] w-auto" alt="" />
-            </div>
-          </Fade>
-          <div>
-            <Fade right>
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary-darker md:text-sm">{t.milkEyebrow}</p>
-              <h2 className="mt-2 font-heading text-2xl uppercase text-white md:text-4xl">{t.knowYourMilk}</h2>
-              <p className="mt-4 text-justify text-sm leading-relaxed text-white/95 md:text-base">{t.milkText}</p>
-            </Fade>
-            <ul className="mt-8 grid grid-cols-2 gap-4">
-              {t.milkTiles.map((label, i) => (
-                <li key={label} className="flex items-center gap-3 rounded-2xl bg-white/15 p-3 backdrop-blur-sm md:p-4">
-                  <img loading="lazy" decoding="async" src={KNOW_ICONS[i].src} alt="" className="h-12 w-12 shrink-0 md:h-16 md:w-16" />
-                  <span className="text-xs font-semibold text-white md:text-base">{label}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
+      {/* ---------- Know your milk (designed image, no text) ---------- */}
+      <section className="w-full bg-white" aria-label={t.knowYourMilk}>
+        <picture>
+          <source media="(max-width: 767px)" srcSet="/images/know-your-milk-nandini-mobile.webp" />
+          <img loading="lazy" decoding="async" src="/images/know-your-milk-nandini.webp" alt={t.knowYourMilk} className="block h-auto w-full" />
+        </picture>
       </section>
 
       {/* ---------- Notifications & tenders ---------- */}
@@ -266,13 +237,17 @@ export default function HomePage({ locale = 'en' }) {
             <ul className="max-h-[420px] divide-y divide-neutral-light2 overflow-y-auto">
               {noticeRows.map((n, i) => (
                 <li key={i}>
-                  <Link href={href('/blog/notification')} className="flex gap-3 px-5 py-3 text-sm transition-colors hover:bg-primary-subtle">
-                    <FaRegHandPointRight className="mt-0.5 shrink-0 text-red-600" aria-hidden="true" />
-                    <span>
-                      <span className="block text-gray-900">{n.title}</span>
+                  <Link href={href('/blog/notification')} className={`flex gap-3 px-5 py-3 text-sm transition-colors hover:bg-primary-subtle ${n.lastDate && !n.open ? 'opacity-70' : ''}`}>
+                    <span className={`mt-1 h-2.5 w-2.5 shrink-0 rounded-full ${n.open ? 'bg-emerald-500' : n.lastDate ? 'bg-neutral-dark4' : 'bg-secondary-main'}`} aria-hidden="true" />
+                    <span className="min-w-0">
+                      <span className="block font-semibold leading-snug text-gray-900">{n.title}</span>
+                      {n.ref && <span className="block truncate text-xs text-neutral-dark2">{n.ref}</span>}
                       {n.lastDate && (
-                        <span className="block text-xs text-neutral-dark2">
-                          {t.lastDate}: {fmtDate(n.lastDate, lang)}
+                        <span className="mt-1 flex flex-wrap items-center gap-2 text-xs">
+                          <span className={`rounded-full px-2 py-0.5 font-bold uppercase tracking-wide ${n.open ? 'bg-emerald-50 text-emerald-700' : 'bg-neutral-light2 text-neutral-dark2'}`}>{n.open ? t.open : t.closed}</span>
+                          <span className="text-neutral-dark2">
+                            {t.lastDate}: {fmtDate(n.lastDate, lang)}
+                          </span>
                         </span>
                       )}
                     </span>
@@ -292,8 +267,8 @@ export default function HomePage({ locale = 'en' }) {
             <div className="w-full overflow-hidden rounded-2xl">
               <div className="animate-scroll flex w-max gap-4">
                 {[...notiImages, ...notiImages].map((img, i) => (
-                  <div key={i} className="h-64 w-72 flex-shrink-0 overflow-hidden rounded-2xl md:h-[420px] md:w-[340px]">
-                    <img loading="lazy" decoding="async" className="h-full w-full object-cover" src={img.src} alt="" />
+                  <div key={i} className="h-64 flex-shrink-0 overflow-hidden rounded-2xl bg-neutral-light3 md:h-[420px]" style={{ aspectRatio: `${img.width} / ${img.height}` }}>
+                    <img loading={i < notiImages.length ? 'eager' : 'lazy'} decoding="async" width={img.width} height={img.height} className="h-full w-full object-cover" src={img.src} alt="" />
                   </div>
                 ))}
               </div>
@@ -303,14 +278,15 @@ export default function HomePage({ locale = 'en' }) {
       </section>
 
       {/* ---------- Quick links ---------- */}
-      <section className="relative w-full overflow-hidden bg-neutral-light3 py-16 md:py-24">
-        <video src="/video/vid.webm" autoPlay muted loop playsInline className="absolute inset-0 z-0 h-full w-full object-cover opacity-20" aria-hidden="true" />
-        <div className="relative z-[1]">
-          <SectionTitle eyebrow={t.quickEyebrow} title={t.quickLinks} />
+      <section className="relative w-full overflow-hidden bg-primary-subtle py-16 md:py-24">
+        <div className="pointer-events-none absolute -left-24 top-10 h-72 w-72 rounded-full bg-secondary-main/20 blur-3xl" aria-hidden="true" />
+        <div className="pointer-events-none absolute -right-24 bottom-0 h-80 w-80 rounded-full bg-primary-main/15 blur-3xl" aria-hidden="true" />
+        <div className="relative">
+          <SectionTitle eyebrow={t.quickEyebrow} title={t.quickLinks} sub={t.quickSub} />
           <Fade bottom>
-            <div className="mx-auto mt-10 grid max-w-5xl grid-cols-2 gap-4 px-4 md:grid-cols-4">
-              {QUICK_LINKS.map((q) => (
-                <QuickLink key={q.path} icon={ICONS[q.icon]} title={q[lang]} href={href(q.path)} />
+            <div className="mx-auto mt-10 grid max-w-6xl grid-cols-2 gap-4 px-4 md:grid-cols-4 md:gap-5">
+              {QUICK_LINKS.map((q, i) => (
+                <QuickLink key={q.path} icon={ICONS[q.icon]} title={q[lang]} desc={q[`${lang}Desc`]} href={href(q.path)} featured={q.featured} image={q.featured ? '/images/milk-bg-cat.jpg' : undefined} className={i === QUICK_LINKS.length - 1 ? 'col-span-2 md:col-span-1' : ''} />
               ))}
             </div>
           </Fade>

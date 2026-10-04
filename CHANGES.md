@@ -164,3 +164,13 @@ Safety net: tag `backup/before-landing-redesign-2026-10-04` on GitHub = the live
 | Removed the page's own runtime error (`newsImp is not defined` on the live site) | | Pre-existing hydration warnings from the header remain on every page |
 
 Verified: `next build` ✅, lint ✅, screenshots of `/`, `/kn` and mobile (Playwright) checked by hand.
+
+Follow-up on the same day after local review (all on `feat/landing-redesign`):
+- Hero: whole 16:9 video visible on desktop (no cropping); on phones the video shows at natural size with a centred text block beneath it.
+- Discover carousel rotates continuously, starts in the middle; new Ksheerasagara image.
+- Know your milk: replaced by the supplied designed image (desktop + mobile versions), no text.
+- Notifications: open/closed badges, reference numbers; "Latest from Nandini" strip no longer jumps while loading (fixed boxes, smaller images).
+- Quick links: featured products card + descriptive action cards.
+- New FSSC 22000 logo.
+- Header top strip: logos left, address and phone with icon badges, language pill and social icons right; cleaner phone layout.
+- Navigation: even spacing, chevrons on menus, plain navy submenus with dividers (hover = pale yellow text, as before); Virtual Tour outlined; no pulse animation.
