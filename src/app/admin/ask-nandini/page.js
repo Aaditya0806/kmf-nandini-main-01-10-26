@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { adminData } from '@/lib/ask-nandini/log';
+import { adminData, listQuestions } from '@/lib/ask-nandini/log';
 import { siteEventCounts } from '@/lib/site-events';
 import { INTENT_OPTIONS } from '@/configtext/intentPopup';
 
@@ -52,14 +52,18 @@ function Rows({ rows, showAnswer }) {
 
 export default async function AskNandiniAdmin({ searchParams }) {
   const days = [7, 30, 90].includes(Number(searchParams?.days)) ? Number(searchParams.days) : 30;
+  const q = typeof searchParams?.q === 'string' ? searchParams.q.slice(0, 100) : '';
+  const pageNo = Math.max(parseInt(searchParams?.p, 10) || 1, 1);
   let data;
   let clicks = [];
+  let list = { rows: [], total: 0, page: 1, pages: 1 };
   let error = null;
   try {
-    [data, clicks] = await Promise.all([adminData(days), siteEventCounts(days)]);
+    [data, clicks, list] = await Promise.all([adminData(days), siteEventCounts(days), listQuestions({ days, page: pageNo, q })]);
   } catch (e) {
     error = e.message;
   }
+  const listHref = (p, term = q) => `/admin/ask-nandini?days=${days}${term ? `&q=${encodeURIComponent(term)}` : ''}&p=${p}#all`;
   const count = (event, value) => clicks.filter((c) => c.event === event && (value === undefined || c.value === value)).reduce((n, c) => n + Number(c.clicks), 0);
   const credit = { footer: count('credit_click', 'footer'), chat: count('credit_click', 'chat') };
   const popupRows = [
@@ -76,7 +80,12 @@ export default async function AskNandiniAdmin({ searchParams }) {
         <div className="flex flex-wrap items-end justify-between gap-3">
           <div>
             <h1 className="font-heading text-2xl font-extrabold text-primary-main">Ask Nandini — questions, gaps & clicks</h1>
-            <p className="text-sm text-gray-600">Anonymised visitor questions (personal details removed). Kept 90 days. {data?.source && `Source: ${data.source}.`}</p>
+            <p className="text-sm text-gray-600">
+              Anonymised visitor questions (personal details removed). Kept 90 days. {data?.source && `Source: ${data.source}.`}{' '}
+              <Link href="/admin/forms" className="font-semibold text-primary-main underline">
+                Forms admin (dealers, demand, complaints) →
+              </Link>
+            </p>
           </div>
           <nav className="flex gap-2 text-sm" aria-label="Period">
             {[7, 30, 90].map((d) => (
@@ -139,6 +148,80 @@ export default async function AskNandiniAdmin({ searchParams }) {
             <Section title="Answers marked 👎" hint="Check these for wrong or unhelpful answers.">
               <Rows rows={data.down} showAnswer />
             </Section>
+
+            <section className="mt-8" id="all">
+              <div className="flex flex-wrap items-end justify-between gap-3">
+                <div>
+                  <h2 className="text-lg font-bold text-primary-main">All questions</h2>
+                  <p className="text-sm text-gray-600">
+                    Every question in the last {days} days, newest first{q ? `, matching “${q}”` : ''}: <strong>{list.total}</strong>. Click a question to see the answer.
+                  </p>
+                </div>
+                <a href={`/admin/ask-nandini/export?days=${days}`} className="rounded-full bg-white px-4 py-2 text-sm font-semibold text-primary-main shadow-sm hover:bg-primary-main hover:text-white">
+                  ⬇ Download CSV ({days} days)
+                </a>
+              </div>
+              <form method="get" action="/admin/ask-nandini#all" className="mt-3 flex gap-2">
+                <input type="hidden" name="days" value={days} />
+                <label htmlFor="q" className="sr-only">
+                  Search questions
+                </label>
+                <input id="q" name="q" defaultValue={q} placeholder="Search questions and answers…" className="min-h-[40px] flex-1 rounded-lg border border-gray-300 bg-white px-3 text-sm" />
+                <button type="submit" className="min-h-[40px] rounded-lg bg-primary-main px-4 text-sm font-semibold text-white">
+                  Search
+                </button>
+                {q && (
+                  <Link href={listHref(1, '')} className="min-h-[40px] rounded-lg bg-white px-4 py-2 text-sm font-semibold text-gray-700 shadow-sm">
+                    Clear
+                  </Link>
+                )}
+              </form>
+              {list.rows.length ? (
+                <ul className="mt-3 divide-y divide-gray-200 rounded-lg bg-white shadow-sm">
+                  {list.rows.map((r) => (
+                    <li key={r.id} className="text-sm">
+                      <details className="group">
+                        <summary className="cursor-pointer list-none p-3 hover:bg-gray-50">
+                          <p className="font-semibold text-gray-900">
+                            <span className="mr-1 inline-block text-gray-400 transition-transform group-open:rotate-90" aria-hidden="true">
+                              ›
+                            </span>
+                            {r.question}
+                          </p>
+                          <p className="pl-4 text-xs text-gray-500">
+                            {when(r.created_at)} · {LANG_NAMES[r.lang] || r.lang || '–'} · {r.page || '–'} ·{' '}
+                            {r.fallback ? <span className="text-amber-700">no answer ({r.fallback})</span> : r.model === 'stored' ? <span className="text-emerald-700">stored reply</span> : 'Claude'}
+                            {r.feedback === 'up' ? ' · 👍' : r.feedback === 'down' ? ' · 👎' : ''}
+                          </p>
+                        </summary>
+                        <p className="mx-3 mb-3 whitespace-pre-wrap rounded bg-gray-50 p-3 text-xs text-gray-700">{r.answer || '(no answer recorded)'}</p>
+                      </details>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="mt-3 rounded bg-white p-4 text-sm text-gray-500 shadow-sm">Nothing yet.</p>
+              )}
+              {list.pages > 1 && (
+                <nav className="mt-3 flex items-center justify-between text-sm" aria-label="Pages">
+                  <span className="text-gray-600">
+                    Page {list.page} of {list.pages}
+                  </span>
+                  <div className="flex gap-2">
+                    {list.page > 1 && (
+                      <Link href={listHref(list.page - 1)} className="rounded-full bg-white px-4 py-2 font-semibold text-primary-main shadow-sm">
+                        ← Newer
+                      </Link>
+                    )}
+                    {list.page < list.pages && (
+                      <Link href={listHref(list.page + 1)} className="rounded-full bg-white px-4 py-2 font-semibold text-primary-main shadow-sm">
+                        Older →
+                      </Link>
+                    )}
+                  </div>
+                </nav>
+              )}
+            </section>
 
             <Section title="Velozity credit clicks" hint="Visitors who clicked the Velozity Global link (each visitor counted once per day).">
               <div className="grid grid-cols-3 gap-3">

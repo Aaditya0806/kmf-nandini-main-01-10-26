@@ -3,6 +3,7 @@ import { searchIndex } from './search';
 import { getJobs, toCard, todayIST } from '@/lib/careers';
 import { careersText } from '@/configtext/careers';
 import { CONTACT } from '@/lib/site';
+import { complaintStatus } from '@/lib/forms/complaints';
 
 // Tool definitions sent to Claude. Keep the order and text stable: they are
 // part of the cached prompt prefix.
@@ -77,6 +78,17 @@ export const TOOL_DEFS = [
       type: 'object',
       properties: { query: { type: 'string', description: 'English keywords' } },
       required: ['query'],
+      additionalProperties: false,
+    },
+  },
+  {
+    name: 'check_complaint_status',
+    description:
+      'Status of a complaint ticket filed on the KMF website (ticket numbers look like KMF-C-7K3PX9). Call this when a visitor gives a ticket number or asks about their complaint. Returns status, category and dates only, never personal details.',
+    input_schema: {
+      type: 'object',
+      properties: { ticket: { type: 'string', description: 'Ticket number, e.g. KMF-C-7K3PX9' } },
+      required: ['ticket'],
       additionalProperties: false,
     },
   },
@@ -278,7 +290,27 @@ async function getContactInfo({ topic }, ctx) {
     };
   }
   const slug = CATEGORY_SLUG[topic] || 'others';
-  return { ...channels, contact_form: `/${ctx.lang}/contact?category=${slug}` };
+  const extra = {};
+  if (topic === 'dealership') {
+    extra.apply_online = `/${ctx.lang}/dealership`;
+    extra.advice = 'The quickest way is the online application page: parlour, milk agency, distributor or franchise. No fee. The marketing team calls back, usually within 7 working days.';
+  }
+  if (topic === 'quality' || topic === 'mrp') {
+    extra.complaint_page = `/${ctx.lang}/complaint`;
+    extra.advice = 'Visitors can file a complaint online with a photo and get a ticket number (KMF-C-XXXXXX) to track it on that page or here in the chat.';
+  }
+  if (topic === 'product_availability') {
+    extra.notify_me_page = `/${ctx.lang}/notify-me`;
+    extra.advice = 'If the visitor is outside Karnataka or a product is not sold near them, suggest the "Notify me when available" page: they leave their PIN code and products, and KMF tells them when it becomes available. KMF uses these requests to plan expansion.';
+  }
+  return { ...channels, contact_form: `/${ctx.lang}/contact?category=${slug}`, ...extra };
+}
+
+async function checkComplaintStatus({ ticket }, ctx) {
+  const s = await complaintStatus(ticket);
+  if (s.invalid) return { found: false, note: 'Not a valid ticket number. Ticket numbers look like KMF-C-7K3PX9 (letters and digits).', complaint_page: `/${ctx.lang}/complaint` };
+  if (!s.found) return { found: false, ticket: s.ticket, note: 'No complaint with this ticket number. Ask the visitor to check it; they can also look it up on the complaint page.', complaint_page: `/${ctx.lang}/complaint` };
+  return { ...s, status_page: `/${ctx.lang}/complaint?ticket=${s.ticket}` };
 }
 
 async function searchSite({ query }, ctx) {
@@ -293,6 +325,7 @@ const IMPL = {
   get_milk_union: getMilkUnion,
   get_contact_info: getContactInfo,
   search_site: searchSite,
+  check_complaint_status: checkComplaintStatus,
   flag_unanswered: async ({ topic }) => ({ ok: true, topic }),
 };
 

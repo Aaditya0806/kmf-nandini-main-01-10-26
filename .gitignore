@@ -47,3 +47,6 @@ node_modules
 
 # Ask Nandini eval output
 .eval
+
+# Supabase CLI link state (local only)
+supabase/.temp/

@@ -100,9 +100,17 @@ export const PAGES = {
     en: { title: 'Careers & Recruitment', description: 'Official KMF Nandini recruitment notifications: current openings, results, admit cards and past recruitments. Beware of fake job offers.' },
     kn: { title: 'ಉದ್ಯೋಗಾವಕಾಶಗಳು ಮತ್ತು ನೇಮಕಾತಿ', description: 'ಕಹಾಮ ನಂದಿನಿಯ ಅಧಿಕೃತ ನೇಮಕಾತಿ ಅಧಿಸೂಚನೆಗಳು: ಪ್ರಸ್ತುತ ಹುದ್ದೆಗಳು, ಫಲಿತಾಂಶಗಳು, ಪ್ರವೇಶ ಪತ್ರಗಳು ಮತ್ತು ಹಿಂದಿನ ನೇಮಕಾತಿಗಳು.' },
   },
+  '/complaint': {
+    en: { title: 'File a Complaint', description: 'Report a problem with a Nandini product, a parlour or overcharging above MRP. Attach a photo, get a ticket number and check its status online.' },
+    kn: { title: 'ದೂರು ಸಲ್ಲಿಸಿ', description: 'ನಂದಿನಿ ಉತ್ಪನ್ನ, ಪಾರ್ಲರ್ ಅಥವಾ ಎಂಆರ್‌ಪಿಗಿಂತ ಹೆಚ್ಚು ಬೆಲೆ ಬಗ್ಗೆ ದೂರು ನೀಡಿ. ಫೋಟೋ ಲಗತ್ತಿಸಿ, ಟಿಕೆಟ್ ಸಂಖ್ಯೆ ಪಡೆದು ಆನ್‌ಲೈನ್‌ನಲ್ಲಿ ಸ್ಥಿತಿ ಪರಿಶೀಲಿಸಿ.' },
+  },
   '/contact': {
     en: { title: 'Contact Us', description: 'Contact KMF Nandini customer care: helpline 080-260 96800, toll free 1800 425 8030, WhatsApp and email, or send us a message.' },
     kn: { title: 'ನಮ್ಮನ್ನು ಸಂಪರ್ಕಿಸಿ', description: 'ಕಹಾಮ ನಂದಿನಿ ಗ್ರಾಹಕ ಸೇವೆ: ಸಹಾಯವಾಣಿ 080-260 96800, ಟೋಲ್ ಫ್ರೀ 1800 425 8030, ವಾಟ್ಸ್ಆ್ಯಪ್ ಮತ್ತು ಇಮೇಲ್.' },
+  },
+  '/dealership': {
+    en: { title: 'Open a Nandini Parlour, Agency or Dealership', description: 'Apply online to open a Nandini parlour, milk agency, distributorship or franchise outlet. No fee; the KMF marketing team contacts you.' },
+    kn: { title: 'ನಂದಿನಿ ಪಾರ್ಲರ್, ಏಜೆನ್ಸಿ ಅಥವಾ ಡೀಲರ್‌ಶಿಪ್', description: 'ನಂದಿನಿ ಪಾರ್ಲರ್, ಹಾಲು ಏಜೆನ್ಸಿ, ವಿತರಕ ಅಥವಾ ಫ್ರಾಂಚೈಸ್ ಮಳಿಗೆ ತೆರೆಯಲು ಆನ್‌ಲೈನ್ ಅರ್ಜಿ ಸಲ್ಲಿಸಿ. ಶುಲ್ಕವಿಲ್ಲ.' },
   },
   '/directors': {
     en: { title: 'Board of Directors', description: 'The Board of Directors of the Karnataka Milk Federation.' },
@@ -123,6 +131,10 @@ export const PAGES = {
   '/nandini-recipes': {
     en: { title: 'Nandini Recipes', description: 'Easy recipes made with Nandini milk, curd, ghee, paneer and butter.' },
     kn: { title: 'ನಂದಿನಿ ಪಾಕವಿಧಾನಗಳು', description: 'ನಂದಿನಿ ಹಾಲು, ಮೊಸರು, ತುಪ್ಪ, ಪನೀರ್ ಮತ್ತು ಬೆಣ್ಣೆಯಿಂದ ಸುಲಭ ಪಾಕವಿಧಾನಗಳು.' },
+  },
+  '/notify-me': {
+    en: { title: 'Notify Me When Nandini Is Available', description: 'Not in Karnataka, or a Nandini product is not available near you? Leave your PIN code and the products you want, and KMF will tell you when they arrive.' },
+    kn: { title: 'ನಂದಿನಿ ಲಭ್ಯವಾದಾಗ ತಿಳಿಸಿ', description: 'ಕರ್ನಾಟಕದ ಹೊರಗಿದ್ದೀರಾ ಅಥವಾ ನಿಮ್ಮ ಹತ್ತಿರ ನಂದಿನಿ ಉತ್ಪನ್ನ ಲಭ್ಯವಿಲ್ಲವೇ? ಪಿನ್ ಕೋಡ್ ಮತ್ತು ಬೇಕಾದ ಉತ್ಪನ್ನಗಳನ್ನು ತಿಳಿಸಿ; ಲಭ್ಯವಾದಾಗ ಕಹಾಮ ತಿಳಿಸುತ್ತದೆ.' },
   },
   '/offers': {
     en: { title: 'Offers', description: 'Current offers on Nandini products.' },

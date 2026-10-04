@@ -447,6 +447,15 @@ Bengaluru - 560 029
                                     Bulk Order
                                   </li>
                                   </Link>
+                                  {[
+                                    ['dealership', 'Dealership & Franchise'],
+                                    ['notify-me', 'Notify Me When Available'],
+                                    ['complaint', 'File a Complaint'],
+                                  ].map(([slug, title]) => (
+                                    <Link key={slug} href={`/${locale}/${slug}`} onClick={() => setOpen(null)}>
+                                      <li className="text-[12px] mt-1 text-white block hover:text-secondary-lighter">{title}</li>
+                                    </Link>
+                                  ))}
             
           </ul>
         </div>

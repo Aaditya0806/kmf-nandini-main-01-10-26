@@ -66,6 +66,7 @@ Server-only variables are never sent to browsers (no `NEXT_PUBLIC_` prefix).
 | `ASK_NANDINI_HASH_SALT` | recommended | random string | Salt for hashing visitor IPs (rate limiting). |
 | `ASK_NANDINI_ADMIN_USER` / `ASK_NANDINI_ADMIN_PASSWORD` | for admin page | strong password | Basic auth for `/admin/ask-nandini`. Unset = admin page is a 404. |
 | `ASK_NANDINI_EVAL_TOKEN` | **never in production** | random string | Lets the eval script bypass limits and pick a model. |
+| `FORMS_NOTIFY_TO`, `CRON_SECRET`, `FORMS_SMTP_*` | no | see docs/FORMS.md | Only for the optional weekly demand-report email; the website forms themselves need nothing extra. |
 
 Fixed limits (in `config.js`): 1,000 characters per message, last 8 turns sent, 1,024 output tokens per call, 4 tool rounds per message, 20 messages / 10 min and 200 / day per visitor.
 
@@ -125,12 +126,16 @@ The script prints scanned PDFs (no text layer; not searchable until OCR'd) and W
 
 ## Admin page
 
+A second admin page, `/admin/forms` (same password), shows dealer applications, notify-me demand and complaint tickets: see docs/FORMS.md.
+
+
 `/admin/ask-nandini` (username/password from the env vars above). Periods: 7 / 30 / 90 days.
 
 - **Unanswered questions** — the assistant had no data (it calls `flag_unanswered`). This is the list of content KMF should add to the website. Note: the model occasionally answers "not published" without flagging, so this list slightly under-counts; the 👎 list catches some of the rest.
 - **Top questions** — what visitors ask most.
 - **Languages visitors wrote in** — demand for Kannada and other languages.
 - **Answers marked 👎** — with the answer text, to spot wrong or unhelpful replies.
+- **All questions** — every question in the period, newest first, 50 per page, with a search box (matches questions and answers); click a question to see the answer, who answered it (stored reply / Claude), the page it was asked on and any 👍/👎. **Download CSV** gives the whole period (opens in Excel; Kannada text preserved).
 - **Velozity credit clicks** — site footer vs chatbot "Powered by", and total.
 - **"What brings you here today?" choices** — how many visitors picked each option, and how many closed it without choosing.
 - Totals: answered rate, limits hit, errors, estimated model cost, tokens.
@@ -170,8 +175,9 @@ Latest result (2026-09-29, Haiku 4.5, with the index): **43/44** — the remaini
 Added 2026-10-01 after the first day's log showed ~35% of questions were the same few (mostly the suggestion buttons: "Any current vacancies?" 39×, "Where can I buy Nandini products?" 22×, "Nandini ghee prices?" 20× …).
 
 - File: `src/configtext/askNandiniReplies.js` (edit the wording there); logic: `src/lib/ask-nandini/stored.js`.
-- Used only when the visitor's **first** message matches a listed question exactly (ignoring capitals, spaces and ?!. at the end). Follow-ups ("yes", "that one") and anything worded differently still go to Claude.
-- **Fixed replies:** prices, where to buy, bulk order, parlour/dealership, complaints, customer care, "is this job offer real?", greetings.
+- Used when the visitor's **first** message matches a listed question exactly (ignoring capitals, spaces and ?!. at the end). Follow-ups ("yes", "that one") and anything worded differently still go to Claude.
+- **Greetings and small talk** (added 2026-10-04 after the log showed "hi", "ok", "thank you", "yes" etc. going to Claude) are answered from stored replies at **any point** in the chat, not only the first message: greetings ("hi", "hello sir", "good morning"…), thanks ("thank you", "tq", "ok thanks"…), acknowledgements ("ok", "fine", "got it"…) and goodbyes ("bye", "no thanks", "nothing else"…). Each has a short pattern (`match`) so spelling variants match too. An unclear **first** message ("yes", "no", "1", a bare number, only punctuation) gets a "What would you like to know?" menu; the same words later in a chat still go to Claude because they may answer something it asked.
+- **Fixed replies:** prices, where to buy, bulk order, parlour/dealership (links to the online application), complaints (link to the complaint page), "check my complaint status", "Nandini is not available in my city" (notify-me page), customer care, "is this job offer real?", greetings/thanks/goodbye.
 - **Live replies** built from current KMF data (so they never go stale): vacancies and how to apply (Careers data), latest tenders (CMS, open first), milk unions and Mysuru union (CMS), product categories and milk types (CMS). If the data source is down, Claude answers instead.
 - Logged with model `stored` and $0 cost; the admin page shows the share answered from stored replies; GA4 gets `chat_tool_used` with `tool=stored_reply`.
 - The eval script always uses Claude (stored replies are skipped in eval mode).

@@ -205,6 +205,18 @@ export const mobileHeader = {
           title: "Bulk Order",
           link: '/en/contact?category=bulk-order'
         },
+        {
+          title: "Dealership & Franchise",
+          link: '/en/dealership'
+        },
+        {
+          title: "Notify Me When Available",
+          link: '/en/notify-me'
+        },
+        {
+          title: "File a Complaint",
+          link: '/en/complaint'
+        },
        
 
         
@@ -385,6 +397,18 @@ export const mobileHeader = {
         {
           title: "ಸಗಟು ಮಾರಾಟ",
           link: '/kn/contact?category=bulk-order'
+        },
+        {
+          title: 'ಡೀಲರ್‌ಶಿಪ್ ಮತ್ತು ಫ್ರಾಂಚೈಸ್',
+          link: '/kn/dealership'
+        },
+        {
+          title: 'ಲಭ್ಯವಾದಾಗ ತಿಳಿಸಿ',
+          link: '/kn/notify-me'
+        },
+        {
+          title: 'ದೂರು ಸಲ್ಲಿಸಿ',
+          link: '/kn/complaint'
         },
        
 
